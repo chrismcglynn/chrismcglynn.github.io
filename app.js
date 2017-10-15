@@ -1,71 +1,143 @@
-// Defining all variables 
-let age = document.getElementById('age').input;
-let male = document.getElementById('male').value;
-let female = document.getElementById('female').value;
-let weight = document.getElementById('weight').input;
-let heightFeet = document.getElementById('feet_cm').input;
-let heightInches = document.getElementById('inches').input;
-let activityLevel = document.getElementById('activity_level').input;
-let gainLossAmount = document.getElementById('gain_loss_amount').input;
-const submit = document.getElementById('submit');
+var displayText;
+var calories;
 
-// Formulas for calculator
-const height = (heightFeet * 12) + heightInches;
-const maleBMR = 66 + (6.2 * weight) + (12.7 * height) - (6.76 * age);
-const femaleBMR = 655.1 + (4.35 * weight) + ( 4.7 * height) - ( 4.7 * age);
+function calculateBMR (gender, height, weight, age) {
+  //multipliers
+  var c1;
+  var hm;
+  var wm;
+  var am;
+  //final result
+  var bmrResult;
+  //capture input values
+  age = document.getElementById('age').value;
+  gender = document.getElementById('gender').value;
+  weight = document.getElementById('weight').value;
+  heightFeet = document.getElementById('feet').value;
+  heightInches = document.getElementById('inches').value;
+  //turn values (str) into numbers
+  heightFeet = parseInt(heightFeet)
+  heightInches = parseInt(heightInches)
+  weight = parseInt(weight)
+  age = parseInt(age)
+  //height converter for inches
+  height = heightFeet * 12  + heightInches;
 
+  if (gender === 'male') {
+    c1 = 66;
+    hm = 6.2 * height;
+    wm = 12.7 * weight;
+    am = 6.76 * age;
+  } else if (gender === 'female') {
+    c1 = 655.1;
+    hm = 4.35 * height;
+    wm = 4.7 * weight;
+    am = 4.7 * age;
+  } 
 
-// Formula to determine user's activity level
-function activityLevelCalc () {
-  if (male === 'male' && activityLevel === 'none') {
-    maleBMR * 1.2;
-  } else if (female === 'female' && activityLevel === 'none') {
-    femaleBMR * 1.2;
-  } else if (male === 'male' && activityLevel === 'light') {
-    maleBMR * 1.375;
-  } else if (female === 'female' && activityLevel === 'light') {
-    femaleBMR * 1.375;
-  } if (male === 'male' && activityLevel === 'moderate') {
-    maleBMR * 1.55;
-  } else if (female === 'female' && activityLevel === 'moderate') {
-    femaleBMR * 1.55;
-  } else if (male === 'male' && activityLevel === 'heavy') {
-    maleBMR * 1.725;
-  } else if (female === 'female' && activityLevel === 'heavy') {
-    femaleBMR * 1.725;
-  } else if (male === 'male' && activityLevel === 'veryHeavy') {
-    maleBMR * 1.9;
-  } else if (female === 'female' && activityLevel === 'veryHeavy') {
-    femaleBMR * 1.9;
-  }
-}
+ bmrResult = c1 + hm  + wm - am;
+ bmrResult = Math.floor(bmrResult)
+ return bmrResult
+};
+
+function calculateActivityBMR (bmrResult, activityLevel) {
+  var multiplier;
+  bmrResult = calculateBMR();
+  activityLevel = document.getElementById('activityLevel').value;
+
+  switch (activityLevel) {
+    case 'no':
+      multiplier = 1.2;
+      break;
+
+    case 'light':
+      multiplier = 1.375;
+      break;
+
+    case 'moderate':
+      multiplier = 1.55;
+      break;
+
+    case 'heavy':
+      multiplier = 1.725;
+      break;
+
+    case 'extreme':
+      multiplier = 1.9;
+      break;
+
+    default:
+      throw new Error('Unknown activity level: ' + activityLevel);
+  };
+  activityLevel = multiplier * bmrResult
+  return activityLevel
+};
 
 // Formula for weight gain vs weight loss vs maintain weight
-function gainLoss (activityLevelCalc) {
-  if (gainLossAmount === 'Lose 2 Pounds per Week'){
-      document.getElementById('weightLoss').innerHTML + '<p>' + activityLevelCalc - 1000 + '</p>';
-      } else if (gainLossAmount === 'Lose 1.5 Pounds per Week'){
-        document.getElementById('weightLoss').innerHTML + '<p>' + activityLevelCalc - 750 + '</p>';
-      } else if (gainLossAmount === 'Lose 1 Pounds per Week') {
-        document.getElementById('weightLoss').innerHTML + '<p>' + activityLevelCalc - 500 + '</p>';
-      } else if (gainLossAmount === 'Lose 0.5 Pounds per Week') {
-        document.getElementById('weightLoss').innerHTML + '<p>' + activityLevelCalc - 250 + '</p>'; 
-      } else if (gainLossAmount === 'Stay the Same Weight') {
-        document.getElementById('maintainWeight').innerHTML + '<p>' + activityLevelCalc + '</p>';
-      } else if (gainLossAmount === 'Gain 0.5 Pound Per Week') {
-        document.getElementById('weightGain').innerHTML + '<p>' + activityLevelCalc + 250 + '</p>';
-      } else if (gainLossAmount === 'Gain 1 Pound Per Week') {
-        document.getElementById('weightGain').innerHTML + '<p>' + activityLevelCalc + 500 + '</p>';
-      }else if (gainLossAmount === 'Gain 1.5 Pounds Per Week') {
-        document.getElementById('weightGain').innerHTML + '<p>' + activityLevelCalc + 750 + '</p>';
-      }else if (gainLossAmount === 'Gain 2 Pounds Per Week') {
-        document.getElementById('weightGain').innerHTML + '<p>' + activityLevelCalc + 1000 + '</p>';
-      }
-}
+function gainLossCalc (activityLevel ,gainLossAmount) {
+  var gainLossAmount = document.getElementById('gain_loss_amount').value;
+  activityLevel = calculateActivityBMR();
 
+  switch (gainLossAmount) {
+    case '-1000':
+      calories = activityLevel - 1000;
+      displayText = 'lose 2 pounds per week,';
+      break;
+    
+    case '-750':
+      calories = activityLevel - 750;
+      displayText = 'lose 1.5 pounds per week,';
+      break;
 
+    case '-500':
+      calories = activityLevel - 500;
+      displayText = 'lose 1 pound per week,';
+      break;
 
+    case '-250':
+      calories = activityLevel - 250;
+      displayText = 'lose .5 pounds per week,';
+      break;
 
-submit.addEventListener('click', () => {
-    alert('you clicked me!')
-});
+    case '0':
+      calories = activityLevel;
+      displayText = 'maintain your current weight,';
+      break;
+
+    case '250':
+      calories = activityLevel + 250;
+      displayText = 'gain .5 pounds per week,';
+      break;
+
+    case '500':
+      calories = activityLevel + 500;
+      displayText = 'gain 1 pound per week,';
+      break;
+
+    case '750':
+      calories =  activityLevel + 750;
+      displayText = 'gain 1.5 pounds per week,';
+      break;
+
+    case '1000':
+      calories = activityLevel + 1000;
+      displayText = 'gain 2 pounds per week,';
+      break;
+
+    default:
+      throw new Error('Select your nutrition goals');
+  };
+  calories = Math.floor(calories) + " Calories";
+  return calories;
+};
+
+function calculateMacros (){
+  $("#submit").click(function(){
+    gainLossCalc();
+      $("#instruct").toggle(function(){
+          $('#instruct').replaceWith( '<p class="white-text">In order to ' + '<span style="font-weight: bold">' +  displayText + '</span>' + ' your daily calorie goals should be:</p>' + '<p class="white-text">' + gainLossCalc() + '</p>');
+    });
+  });
+};
+
+calculateMacros();
