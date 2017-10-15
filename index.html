@@ -35,7 +35,7 @@
                 <label>Sex:</label>
                 <div class="input-group col-lg-3">
                   <div class="btn-group btn-group-sm" data-toggle="buttons">
-                    <label class="btn btn-default active" style="background-color:#EE6E73;">
+                    <label class="btn btn-default active" style="background-color:#4DB6AC;">
                       <input type="radio" name="sex" value="male" checked="checked" id="male"> Male
                     </label>
                     <label class="btn btn-default" style="background-color:#EE6E73;">
@@ -65,7 +65,7 @@
                     </select>
                     <label for="gain_loss_amount">I want to:</label>
                     <select id="gain_loss_amount" name="gain_loss_amount" class="form-control"><option value="-1000">Lose 2 Pounds per Week</option><option value="-750">Lose 1.5 Pounds per Week</option><option value="-500">Lose 1 Pounds per Week</option><option value="-250">Lose 0.5 Pounds per Week</option><option value="0" selected="selected">Stay the Same Weight</option><option value="250">Gain 0.5 Pound per Week</option><option value="500">Gain 1 Pound per Week</option><option value="750">Gain 1.5 Pounds per Week</option><option value="1000">Gain 2 Pounds per Week</option></select>
-                    <button class="btn waves-effect waves-light" style="background-color:#EE6E73;" type="submit" name="action">Submit
+                    <button id="submit" class="btn waves-effect waves-light" style="background-color:#EE6E73;" type="submit" name="action">Submit
                     </button>
                 </form>
             </div>
@@ -77,9 +77,9 @@
                     </div>
                     <div class="card-tabs">
                       <ul class="tabs tabs-fixed-width">
-                        <li class="tab"><a href="#test4">Weight Loss</a></li>
-                        <li class="tab"><a class="active" href="#test5">Maintain Weight</a></li>
-                        <li class="tab"><a href="#test6">Weight Gain</a></li>
+                        <li id="weightLoss" class="tab"><a href="#test4">Weight Loss</a></li>
+                        <li id="maintainWeight" class="tab"><a class="active" href="#test5">Maintain Weight</a></li>
+                        <li id="weightGain" class="tab"><a href="#test6">Weight Gain</a></li>
                       </ul>
                     </div>
                     <div class="card-content grey lighten-4">
@@ -134,5 +134,9 @@
         
         <!-- Materialize JavaScript -->
         <script type="text/javascript" src="materialize/js/materialize.js"></script>
+        <script type="text/javascript" src="materialize/js/app.js"></script>
+        <script>$(document).ready(function() {
+    $('select').material_select();
+});</script>
     </body>
 </html>
